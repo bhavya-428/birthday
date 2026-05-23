@@ -4,7 +4,6 @@ import CakeScene from './components/CakeScene'
 import ScrapbookScene from './components/ScrapbookScene'
 import { startBGM, stopBGM } from './utils/audio'
 
-export const FRIEND_NAME = 'Bhavya'
 
 export default function App() {
   const [scene, setScene] = useState('countdown') // countdown | cake | book
@@ -84,8 +83,13 @@ export default function App() {
           <button
             className="ui-btn"
             onClick={() => {
-              if (scene === 'book') setScene('cake')
-              else setScene('countdown')
+              if (scene === 'book') {
+                setScene('cake')
+              } else {
+                setScene('countdown')
+                stopBGM()
+                setBgmActive(false)
+              }
             }}
           >
             ↩ Back

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { playPageFlip } from '../utils/audio'
-import { FRIEND_NAME } from '../App'
+import { FRIEND_NAME } from '../constants'
 import {
   PageOneLeft, PageOneRight,
   PageTwoLeft, PageTwoRight,
@@ -12,6 +12,7 @@ export default function Scrapbook() {
   const [flippedSheets, setFlippedSheets] = useState([]) // indices of flipped sheets: 0 (cover), 1, 2, etc.
   const [bookStyle, setBookStyle] = useState({ transform: 'scale(1)' })
   const [isPortrait, setIsPortrait] = useState(false)
+  const [activeImage, setActiveImage] = useState(null) // { src, caption }
 
   useEffect(() => {
     const handleResize = () => {
@@ -71,6 +72,10 @@ export default function Scrapbook() {
     setFlippedSheets([])
   }, [])
 
+  const onImageClick = useCallback((src, caption) => {
+    setActiveImage({ src, caption })
+  }, [])
+
   const totalSheets = 4 // Cover + Spread 1-to-2 + Spread 2-to-3 + Spread 3-to-4
 
   return (
@@ -99,7 +104,7 @@ export default function Scrapbook() {
           {/* Back Face: Page 1 Left */}
           <div className="sheet-face sheet-back" onClick={() => handleFlip(0)}>
             <div className="page-spine-shadow-left" />
-            <PageOneLeft />
+            <PageOneLeft onImageClick={onImageClick} />
           </div>
         </div>
 
@@ -108,12 +113,12 @@ export default function Scrapbook() {
           {/* Front Face: Page 1 Right */}
           <div className="sheet-face sheet-front" onClick={() => handleFlip(1)}>
             <div className="page-spine-shadow-right" />
-            <PageOneRight />
+            <PageOneRight onImageClick={onImageClick} />
           </div>
           {/* Back Face: Page 2 Left */}
           <div className="sheet-face sheet-back" onClick={() => handleFlip(1)}>
             <div className="page-spine-shadow-left" />
-            <PageTwoLeft />
+            <PageTwoLeft onImageClick={onImageClick} />
           </div>
         </div>
 
@@ -127,7 +132,7 @@ export default function Scrapbook() {
           {/* Back Face: Page 3 Left */}
           <div className="sheet-face sheet-back" onClick={() => handleFlip(2)}>
             <div className="page-spine-shadow-left" />
-            <PageThreeLeft />
+            <PageThreeLeft onImageClick={onImageClick} />
           </div>
         </div>
 
@@ -136,10 +141,16 @@ export default function Scrapbook() {
           {/* Front Face: Page 3 Right */}
           <div className="sheet-face sheet-front" onClick={() => handleFlip(3)}>
             <div className="page-spine-shadow-right" />
-            <PageThreeRight />
+            <PageThreeRight onImageClick={onImageClick} />
           </div>
           {/* Back Face: Page 4 Full-Width Spread (Combined Right & Left) */}
-          <div className="sheet-face sheet-back final-spread-face">
+          <div 
+            className="sheet-face sheet-back final-spread-face"
+            onClick={(e) => {
+              if (e.target.closest('.video-frame') || e.target.closest('.reset-book-btn')) return;
+              handleFlip(3);
+            }}
+          >
             <div className="final-spine-shadow" />
             <PageFourFull onReset={resetBook} />
           </div>
@@ -157,6 +168,19 @@ export default function Scrapbook() {
           <span>✦ Tap on the outer edges to turn pages ✦</span>
         )}
       </div>
+
+      {/* --- IMAGE LIGHTBOX --- */}
+      {activeImage && (
+        <div className="lightbox-overlay" onClick={() => setActiveImage(null)}>
+          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <button className="lightbox-close" onClick={() => setActiveImage(null)}>&times;</button>
+            <img src={activeImage.src} alt={activeImage.caption} className="lightbox-img" />
+            {activeImage.caption && (
+              <div className="lightbox-caption">{activeImage.caption}</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

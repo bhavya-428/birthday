@@ -114,9 +114,11 @@ export function playChime() {
 }
 
 let bgmAudio = null;
+let bgmShouldPlay = false;
 
 export function startBGM() {
   try {
+    bgmShouldPlay = true;
     if (!bgmAudio) {
       bgmAudio = new Audio('/bts_birthday.m4a');
       bgmAudio.loop = true;
@@ -125,7 +127,9 @@ export function startBGM() {
     bgmAudio.play().catch(e => {
       console.warn("Failed to play BGM:", e);
       const playOnUserInteraction = () => {
-        if (bgmAudio) bgmAudio.play().catch(err => console.warn(err));
+        if (bgmShouldPlay && bgmAudio) {
+          bgmAudio.play().catch(err => console.warn(err));
+        }
         window.removeEventListener('click', playOnUserInteraction);
         window.removeEventListener('touchstart', playOnUserInteraction);
       };
@@ -139,6 +143,7 @@ export function startBGM() {
 
 export function stopBGM() {
   try {
+    bgmShouldPlay = false;
     if (bgmAudio) {
       bgmAudio.pause();
     }

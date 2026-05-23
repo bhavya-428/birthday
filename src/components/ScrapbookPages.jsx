@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react'
 
 /* ===== REUSABLE BITS ===== */
-function PhotoSlot({ src, icon = '📸', label = 'add your photo', style = {} }) {
+function PhotoSlot({ src, icon = '📸', label = 'add your photo', style = {}, onImageClick }) {
   return (
-    <div className="photo-slot" style={style}>
+    <div 
+      className="photo-slot" 
+      style={{ ...style, cursor: src ? 'zoom-in' : 'default' }}
+      onClick={(e) => {
+        if (src && onImageClick) {
+          e.stopPropagation()
+          onImageClick(src, label)
+        }
+      }}
+    >
       {src ? (
         <img src={src} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       ) : (
@@ -37,7 +46,7 @@ function QuoteCard({ children }) {
 }
 
 /* ===== PAGE 1: MEMORY WALL ===== */
-export function PageOneLeft() {
+export function PageOneLeft({ onImageClick }) {
   return (
     <div className="page page-left" style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
       <Tape style={{ top: -5, left: '40%', transform: 'rotate(-4deg)' }} />
@@ -46,7 +55,7 @@ export function PageOneLeft() {
       <Doodle emoji="💫" style={{ top: '52%', left: 6, fontSize: 11 }} />
 
       <div className="page-heading">Our Beginning ✨</div>
-      <PhotoSlot src="/illust_cherry_blossom.png" label="cherry blossom picnic" style={{ height: '50%', flexShrink: 0 }} />
+      <PhotoSlot src="/illust_cherry_blossom.png" label="cherry blossom picnic" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
       <div className="caption-text" style={{ fontSize: 'clamp(12px,1.9vw,15px)', color: '#b5306e', marginTop: 2 }}>
         The day we first met… 🌷
       </div>
@@ -58,7 +67,7 @@ export function PageOneLeft() {
   )
 }
 
-export function PageOneRight() {
+export function PageOneRight({ onImageClick }) {
   return (
     <div className="page page-right" style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
       <Tape style={{ top: -5, right: '28%', transform: 'rotate(5deg)' }} />
@@ -66,7 +75,7 @@ export function PageOneRight() {
       <Doodle emoji="🌙" style={{ bottom: 14, right: 10, fontSize: 13 }} />
 
       <div className="page-heading" style={{ color: '#8040a0' }}>My Favorite Memory ✨</div>
-      <PhotoSlot src="/illust_starry_night.png" label="starry night camp" style={{ height: '50%', flexShrink: 0 }} />
+      <PhotoSlot src="/illust_starry_night.png" label="starry night camp" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
       <div className="caption-text" style={{ fontSize: 'clamp(12px,1.9vw,15px)', color: '#8040a0', marginTop: 2 }}>
         remember this day? 🥺💖
       </div>
@@ -82,14 +91,14 @@ export function PageOneRight() {
 
 /* ===== PAGE 2: HEART COLLAGE ===== */
 const HEART_POSITIONS = [
-  { left: '50%', top: '2%',  transform: 'translateX(-50%)', delay: '0s', src: '/illust_cafe.png' },
-  { left: '8%',  top: '22%', delay: '0.3s', src: '/illust_roadtrip.png' },
-  { right: '8%', top: '22%', delay: '0.6s', src: '/illust_beach.png' },
-  { left: '20%', top: '62%', delay: '0.9s', src: '/illust_cherry_blossom.png' },
-  { right: '20%',top: '62%', delay: '1.2s', src: '/illust_starry_night.png' }
+  { left: '26%', top: '15%', delay: '0s', src: '/illust_cafe.png' },
+  { right: '26%', top: '15%', delay: '0.3s', src: '/illust_roadtrip.png' },
+  { left: '8%',  top: '40%', delay: '0.6s', src: '/illust_beach.png' },
+  { right: '8%', top: '40%', delay: '0.9s', src: '/illust_cherry_blossom.png' },
+  { left: '50%', top: '68%', transform: 'translateX(-50%)', delay: '1.2s', src: '/illust_starry_night.png' }
 ]
 
-export function PageTwoLeft() {
+export function PageTwoLeft({ onImageClick }) {
   return (
     <div className="page page-left" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <div className="page-heading">Our Favorite Moments 💕</div>
@@ -107,7 +116,21 @@ export function PageTwoLeft() {
               right: pos.right,
               transform: pos.transform,
               animationDelay: pos.delay, 
-              animationDuration: (2 + i * 0.3) + 's' 
+              animationDuration: (2 + i * 0.3) + 's',
+              cursor: 'zoom-in'
+            }}
+            onClick={(e) => {
+              e.stopPropagation()
+              if (onImageClick) {
+                const labels = {
+                  '/illust_cafe.png': 'Cafe date with friends ☕',
+                  '/illust_roadtrip.png': 'Roadtrip adventure 🚗',
+                  '/illust_beach.png': 'Sunny beach day 🏖️',
+                  '/illust_cherry_blossom.png': 'Cherry blossom picnic 🌸',
+                  '/illust_starry_night.png': 'Starry night campfire ✨'
+                };
+                onImageClick(pos.src, labels[pos.src] || 'Memory')
+              }
             }}
           >
             <img src={pos.src} alt={`collage-${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -132,28 +155,53 @@ export function PageTwoLeft() {
 
 export function PageTwoRight() {
   return (
-    <div className="page page-right" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10 }}>
-      <Doodle emoji="🌸" style={{ top: 10, right: 10 }} />
-      <Doodle emoji="⭐" style={{ bottom: 12, left: 10 }} />
-      <FloatHeart style={{ top: '20%', right: '12%', animationDelay: '0.5s' }} />
-      <FloatHeart style={{ bottom: '30%', left: '8%', animationDelay: '1.2s' }} />
-
+    <div className="page page-right" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 8 }}>
+      <Doodle emoji="✨" style={{ top: 8, right: 12 }} />
+      <Doodle emoji="💫" style={{ bottom: 10, right: 12 }} />
+      
       <QuoteCard>
         "In all the world, there is no heart for us like yours. In all the world, there is no love for you like ours. 💕"
       </QuoteCard>
 
-      <div className="caption-text" style={{ color: '#b5306e', fontSize: 'clamp(11px,1.7vw,14px)' }}>
-        Every single photo tells a story only we know… 🥺
+      <div className="caption-text" style={{ color: '#b5306e', fontSize: 'clamp(12px,1.9vw,15px)', fontWeight: 'bold', margin: '2px 0 0' }}>
+        Our Promises To You 📜
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-        <div style={{ background: 'linear-gradient(135deg,#FFE4F0,#EDD8FF)', borderRadius: 10, padding: '8px 12px' }}>
-          <div style={{ fontFamily: "'Caveat', cursive", fontSize: 13, color: '#8040a0' }}>📍 The places we've been</div>
-          <div style={{ fontFamily: "'Caveat', cursive", fontSize: 12, color: '#b5306e', opacity: 0.8 }}>every corner is a memory 🌍</div>
+      <div className="emotional-promises-list" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className="promise-item" style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+          <span style={{ fontSize: 18, lineHeight: 1.2 }}>🌸</span>
+          <span style={{ fontFamily: "'Caveat', cursive", fontSize: 14, color: '#5C3D5E', lineHeight: 1.3 }}>
+            To stay by your side, celebrating your joy and keeping you warm through every season of life.
+          </span>
         </div>
-        <div style={{ background: 'linear-gradient(135deg,#FFF8D0,#FFE4F0)', borderRadius: 10, padding: '8px 12px' }}>
-          <div style={{ fontFamily: "'Caveat', cursive", fontSize: 13, color: '#a07000' }}>✨ The laughs we've shared</div>
-          <div style={{ fontFamily: "'Caveat', cursive", fontSize: 12, color: '#c06000', opacity: 0.8 }}>can't stop, won't stop 😂💛</div>
+        <div className="promise-item" style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+          <span style={{ fontSize: 18, lineHeight: 1.2 }}>⭐</span>
+          <span style={{ fontFamily: "'Caveat', cursive", fontSize: 14, color: '#5C3D5E', lineHeight: 1.3 }}>
+            To cherish all the late-night talks and secrets we've shared under the quiet starry skies.
+          </span>
+        </div>
+        <div className="promise-item" style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+          <span style={{ fontSize: 18, lineHeight: 1.2 }}>💕</span>
+          <span style={{ fontFamily: "'Caveat', cursive", fontSize: 14, color: '#5C3D5E', lineHeight: 1.3 }}>
+            To hold onto this beautiful bond, making sure you always know how deeply loved you are.
+          </span>
+        </div>
+        <div className="promise-item" style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+          <span style={{ fontSize: 18, lineHeight: 1.2 }}>💕</span>
+          <span style={{ fontFamily: "'Caveat', cursive", fontSize: 14, color: '#5C3D5E', lineHeight: 1.3 }}>
+            To turn every ordinary laughter and silly picture into a memory we'll treasure forever.
+          </span>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 2 }}>
+        <div style={{ background: 'linear-gradient(135deg,#FFE4F0,#EDD8FF)', borderRadius: 10, padding: '6px 10px' }}>
+          <div style={{ fontFamily: "'Caveat', cursive", fontSize: 12, color: '#8040a0', fontWeight: 'bold' }}>📍 The places we've been</div>
+          <div style={{ fontFamily: "'Caveat', cursive", fontSize: 11, color: '#b5306e', opacity: 0.9 }}>every corner of the world is warmer because we shared it 🌍</div>
+        </div>
+        <div style={{ background: 'linear-gradient(135deg,#FFF8D0,#FFE4F0)', borderRadius: 10, padding: '6px 10px' }}>
+          <div style={{ fontFamily: "'Caveat', cursive", fontSize: 12, color: '#a07000', fontWeight: 'bold' }}>✨ The laughs we've shared</div>
+          <div style={{ fontFamily: "'Caveat', cursive", fontSize: 11, color: '#c06000', opacity: 0.9 }}>endless giggles that healed our hearts when we needed it most 😂💛</div>
         </div>
       </div>
     </div>
@@ -171,11 +219,15 @@ const POLAROIDS_RIGHT = [
   { w: '46%', bottom: '2%', left: '4%', rotate: '6deg',  cap: 'always together 🌷', src: '/illust_cafe.png' }
 ]
 
-function PolaroidCard({ style, rotate, width, cap, src }) {
+function PolaroidCard({ style, rotate, width, cap, src, onImageClick }) {
   return (
     <div
       className="polaroid-card"
-      style={{ ...style, width, transform: `rotate(${rotate})` }}
+      style={{ ...style, width, transform: `rotate(${rotate})`, cursor: 'zoom-in' }}
+      onClick={(e) => {
+        e.stopPropagation()
+        if (onImageClick) onImageClick(src, cap)
+      }}
     >
       <div className="polaroid-img">
         <img src={src} alt={cap} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -185,7 +237,7 @@ function PolaroidCard({ style, rotate, width, cap, src }) {
   )
 }
 
-export function PageThreeLeft() {
+export function PageThreeLeft({ onImageClick }) {
   return (
     <div className="page page-left" style={{ position: 'relative' }}>
       <div className="page-heading" style={{ position: 'relative', zIndex: 5 }}>Our Adventures 🌸</div>
@@ -200,6 +252,7 @@ export function PageThreeLeft() {
             width={p.w}
             cap={p.cap}
             src={p.src}
+            onImageClick={onImageClick}
           />
         ))}
       </div>
@@ -235,8 +288,20 @@ function SecretLetter() {
   const [open, setOpen] = useState(false)
   const [speaking, setSpeaking] = useState(false)
 
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [])
+
   const playVoiceNote = (e) => {
     e.stopPropagation()
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      console.warn("Speech synthesis not supported in this browser.")
+      return
+    }
     try {
       if (speaking) {
         window.speechSynthesis.cancel()
@@ -245,7 +310,7 @@ function SecretLetter() {
       }
       window.speechSynthesis.cancel()
       const speech = new SpeechSynthesisUtterance(
-        "Happy Birthday, Bhavya! You are the most wonderful friend, and we hope this surprise brings a giant smile to your face. Let's make many more memories together!"
+        "Happy Birthday, Pranathi! You are the most wonderful friend, and we hope this surprise brings a giant smile to your face. Let's make many more memories together!"
       );
       speech.pitch = 1.35; // cute high-pitched tone
       speech.rate = 0.95;
@@ -269,30 +334,32 @@ function SecretLetter() {
         </div>
         <div className="envelope-paper">
           <div className="paper-note">
-            <h4 style={{ fontFamily: "'Caveat', cursive", color: '#b5306e', fontSize: 16, marginBottom: 2 }}>For Bhavya 🌸</h4>
+            <h4 style={{ fontFamily: "'Caveat', cursive", color: '#b5306e', fontSize: 16, marginBottom: 2 }}>For Pranathi 🌸</h4>
             <p style={{ fontFamily: "'Caveat', cursive", fontSize: 13, color: '#5C3D5E', lineHeight: 1.25, margin: '2px 0 6px', minHeight: '50px' }}>
               <TypewriterText 
                 active={open} 
                 text="You are our absolute favorite human. Thank you for always listening to our silly rants, sharing late-night snacks, and making every ordinary day feel like an adventure! 🌸✨" 
               />
             </p>
-            <button className="voice-note-btn" onClick={playVoiceNote} style={{
-              background: speaking ? '#b5306e' : '#F472B6',
-              color: 'white',
-              border: 'none',
-              borderRadius: '20px',
-              padding: '4px 10px',
-              fontSize: '11px',
-              fontFamily: "'Nunito', sans-serif",
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              boxShadow: '0 2px 5px rgba(244,114,182,0.3)',
-              margin: '0 auto'
-            }}>
-              {speaking ? '🔊 Playing...' : '🎙️ Voice Note'}
-            </button>
+            {typeof window !== 'undefined' && window.speechSynthesis && (
+              <button className="voice-note-btn" onClick={playVoiceNote} style={{
+                background: speaking ? '#b5306e' : '#F472B6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '20px',
+                padding: '4px 10px',
+                fontSize: '11px',
+                fontFamily: "'Nunito', sans-serif",
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: '0 2px 5px rgba(244,114,182,0.3)',
+                margin: '0 auto'
+              }}>
+                {speaking ? '🔊 Playing...' : '🎙️ Voice Note'}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -303,7 +370,7 @@ function SecretLetter() {
   )
 }
 
-export function PageThreeRight() {
+export function PageThreeRight({ onImageClick }) {
   return (
     <div className="page page-right" style={{ position: 'relative' }}>
       <Doodle emoji="🌸" style={{ top: 10, left: 10 }} />
@@ -317,6 +384,7 @@ export function PageThreeRight() {
             width={p.w}
             cap={p.cap}
             src={p.src}
+            onImageClick={onImageClick}
           />
         ))}
       </div>
@@ -345,7 +413,7 @@ export function PageFourFull({ onReset }) {
         />
       </div>
 
-      <div className="final-message">Thank you for being part of our lives 💖</div>
+      <div className="final-message">Thank you for being part of my life 💖</div>
 
       <div className="floating-row">
         {['💕','✨','🌸','💫','🩷','⭐','💖'].map((e, i) => (

@@ -3,7 +3,7 @@ import ChibiCharacter from './ChibiCharacter'
 import CakeSVG from './CakeSVG'
 import { useParticles } from '../hooks/useParticles'
 import { playConfettiPop, playChime } from '../utils/audio'
-import { FRIEND_NAME } from '../App'
+import { FRIEND_NAME } from '../constants'
 
 const FLOATER_EMOJIS = ['💖','🌸','✨','💕','🎈','⭐','💫','🌷','🎀','🦋','🍰','🎊']
 const BALLOONS       = ['🎈','💗','⭐','🎈']
@@ -21,8 +21,7 @@ const DANCER_POSITIONS = [
   { left: '12%', bottom: '10%'},
   { right: '12%',bottom: '10%'}
 ]
-
-export default function CakeScene({ onNext }) {
+export default function CakeScene({ onNext, onSlice }) {
   const [visible,   setVisible]   = useState(false)
   const [sliced,    setSliced]    = useState(false)
   const [showText,  setShowText]  = useState(false)
@@ -30,20 +29,16 @@ export default function CakeScene({ onNext }) {
   const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 })
   const [floaters,  setFloaters]  = useState([])
   const [showDeco,  setShowDeco]  = useState(false)
-
   const chibiRef  = useRef(null)
   const dragRef   = useRef({ down: false, startX: 0, startY: 0 })
   const floaterId = useRef(0)
   const timerRef  = useRef([])
-
   const { burst, tapHeart } = useParticles()
-
   // Fade in
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 80)
     return () => clearTimeout(t)
   }, [])
-
   // Eye tracking & Head rotation for mouse
   const handleMouseMove = useCallback((e) => {
     if (!chibiRef.current) return
@@ -63,19 +58,16 @@ export default function CakeScene({ onNext }) {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [handleMouseMove])
 
-  // Touch eye & Head tracking
   const handleTouchMove = useCallback((e) => {
-    const t = e.touches[0]
-    if (!chibiRef.current) return
+    const t = e.touches?.[0]
+    if (!t || !chibiRef.current) return
     const rect = chibiRef.current.getBoundingClientRect()
     const cx   = rect.left + rect.width  / 2
     const cy   = rect.top  + rect.height / 2
     const dx   = (t.clientX - cx) / window.innerWidth
     const dy   = (t.clientY - cy) / window.innerHeight
     setEyeOffset({ x: dx * 5, y: dy * 3 })
-    if (chibiRef.current) {
-      chibiRef.current.style.transform = `rotate(${dx * 5}deg)`
-    }
+    chibiRef.current.style.transform = `rotate(${dx * 5}deg)`
   }, [])
 
   // Floater loop
@@ -105,29 +97,47 @@ export default function CakeScene({ onNext }) {
     burst(x, y)
     playConfettiPop()
     playChime()
+    if (onSlice) onSlice()
     setTimeout(() => setShowText(true), 550)
     setTimeout(() => { setShowBtn(true); setShowDeco(true) }, 1100)
-  }, [sliced, burst])
+  }, [sliced, burst, onSlice])
 
   const onCakePtrDown = (e) => {
+    if (sliced) return
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0
     dragRef.current = {
       down: true,
-      startX: e.clientX ?? e.touches?.[0]?.clientX ?? 0,
-      startY: e.clientY ?? e.touches?.[0]?.clientY ?? 0
+      startX: clientX,
+      startY: clientY
     }
   }
+
+  const onCakePtrMove = (e) => {
+    if (!dragRef.current.down || sliced) return
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0
+    const dx = clientX - dragRef.current.startX
+    const dy = clientY - dragRef.current.startY
+    const dist = Math.sqrt(dx * dx + dy * dy)
+    // Slices cake mid-drag/swipe if movement exceeds 20px
+    if (dist > 20) {
+      doSlice(clientX, clientY)
+      dragRef.current.down = false
+    }
+  }
+
   const onCakePtrUp = (e) => {
-    if (!dragRef.current.down) return
+    if (!dragRef.current.down || sliced) return
     const cx = e.clientX ?? e.changedTouches?.[0]?.clientX ?? window.innerWidth / 2
     const cy = e.clientY ?? e.changedTouches?.[0]?.clientY ?? window.innerHeight / 2
-    
-    // Always trigger slice on touch end or click release
     doSlice(cx, cy)
     dragRef.current.down = false
   }
 
   // Tap hearts on click anywhere in scene
   const onSceneClick = (e) => {
+    if (!e.target || typeof e.target.closest !== 'function') return
     // Only spawn hearts if user didn't click/tap the cake, button or back button
     if (e.target.closest('.cake-container') || e.target.closest('.next-scene-btn') || e.target.closest('.ui-btn')) return;
     tapHeart(e.clientX, e.clientY)
@@ -186,8 +196,13 @@ export default function CakeScene({ onNext }) {
         <div
           onMouseDown={onCakePtrDown}
           onMouseUp={onCakePtrUp}
+          onMouseMove={onCakePtrMove}
           onTouchStart={onCakePtrDown}
           onTouchEnd={onCakePtrUp}
+          onTouchMove={(e) => {
+            e.stopPropagation()
+            onCakePtrMove(e)
+          }}
         >
           <CakeSVG sliced={sliced} />
         </div>
