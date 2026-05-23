@@ -55,9 +55,9 @@ export function PageOneLeft({ onImageClick }) {
       <Doodle emoji="💫" style={{ top: '52%', left: 6, fontSize: 11 }} />
 
       <div className="page-heading">Our Beginning ✨</div>
-      <PhotoSlot src="/photo_selfie.jpg" label="Our first picture together 🥺💖" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
+      <PhotoSlot src="/photo_chibi.jpg" label="Pranathi chibi collage" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
       <div className="caption-text" style={{ fontSize: 'clamp(12px,1.9vw,15px)', color: '#b5306e', marginTop: 2 }}>
-        The day we first met… 🌷
+        Where it all began... 💖
       </div>
       <QuoteCard>
         "Some people come into your life and change everything — you're one of them. 🌸"
@@ -75,9 +75,9 @@ export function PageOneRight({ onImageClick }) {
       <Doodle emoji="🌙" style={{ bottom: 14, right: 10, fontSize: 13 }} />
 
       <div className="page-heading" style={{ color: '#8040a0' }}>My Favorite Memory ✨</div>
-      <PhotoSlot src="/photo_hug.jpg" label="That warm, cozy hug from behind 🧸💕" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
+      <PhotoSlot src="/photo_selfie.jpg" label="Selfie with Pranathi" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
       <div className="caption-text" style={{ fontSize: 'clamp(12px,1.9vw,15px)', color: '#8040a0', marginTop: 2 }}>
-        remember this day? 🥺💖
+        That perfect day when our smiles lit up the world... 🥺💖
       </div>
 
       <div className="tag-row" style={{ marginTop: 2 }}>
@@ -123,11 +123,11 @@ export function PageTwoLeft({ onImageClick }) {
               e.stopPropagation()
               if (onImageClick) {
                 const labels = {
-                  '/photo_selfie.jpg': 'Our favorite selfie together 🥺💖',
-                  '/photo_hug.jpg': 'That warm, cozy hug from behind 🧸💕',
-                  '/photo_away.jpg': 'A beautiful moment captured forever ✨🌸',
-                  '/photo_side.jpg': 'Every side of you is absolutely wonderful 🌷💫',
-                  '/photo_chibi.jpg': 'My favorite chibi art collage of you! 🎨💝'
+                  '/photo_selfie.jpg': 'A beautiful day filled with laughter 🌸',
+                  '/photo_hug.jpg': 'Warm hugs and endless comfort 🫂❤️',
+                  '/photo_away.jpg': 'Capturing the beautiful sunset of our life 🌅',
+                  '/photo_side.jpg': 'Standing together through thick and thin 🤝',
+                  '/photo_chibi.jpg': 'Our sweet chibi world where magic happens ✨'
                 };
                 onImageClick(pos.src, labels[pos.src] || 'Memory')
               }
@@ -210,13 +210,13 @@ export function PageTwoRight() {
 
 /* ===== PAGE 3: POLAROIDS ===== */
 const POLAROIDS_LEFT = [
-  { w: '44%', top: '2%',  left: '2%',   rotate: '-6deg', cap: 'magic sunset 🌅', src: '/photo_away.jpg' },
-  { w: '42%', top: '6%',  right: '2%',  rotate: '5deg',  cap: 'bff forever 💕', src: '/photo_selfie.jpg' },
-  { w: '46%', bottom: '4%', left: '8%', rotate: '3deg',  cap: 'chibi art grid 🎨', src: '/photo_chibi.jpg' }
+  { w: '44%', top: '2%',  left: '2%',   rotate: '-6deg', cap: 'Capture the moment ❤️', src: '/photo_away.jpg' },
+  { w: '42%', top: '6%',  right: '2%',  rotate: '5deg',  cap: 'Sweet together 💖', src: '/photo_chibi.jpg' },
+  { w: '46%', bottom: '4%', left: '8%', rotate: '3deg',  cap: 'Best day ever 🌸', src: '/photo_selfie.jpg' }
 ]
 const POLAROIDS_RIGHT = [
-  { w: '48%', top: '4%',  right: '4%',  rotate: '-4deg', cap: 'warmest hug 🧸', src: '/photo_hug.jpg' },
-  { w: '46%', bottom: '2%', left: '4%', rotate: '6deg',  cap: 'elegant side view 🌷', src: '/photo_side.jpg' }
+  { w: '48%', top: '4%',  right: '4%',  rotate: '-4deg', cap: 'Looking ahead side-by-side 💫', src: '/photo_side.jpg' },
+  { w: '46%', bottom: '2%', left: '4%', rotate: '6deg',  cap: 'Warm hugs 🫂', src: '/photo_hug.jpg' }
 ]
 
 function PolaroidCard({ style, rotate, width, cap, src, onImageClick }) {
@@ -404,7 +404,7 @@ export function PageFourFull({ onReset }) {
       <div className="video-frame">
         <video 
           src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-background-987-large.mp4" 
-          poster="/photo_selfie.jpg"
+          poster="/photo_chibi.jpg"
           controls 
           loop 
           muted 
