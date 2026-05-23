@@ -24,19 +24,15 @@ function PhotoSlot({ src, icon = '📸', label = 'add your photo', style = {}, o
     </div>
   )
 }
-
 function Tape({ style = {} }) {
   return <div className="tape-strip" style={style} />
 }
-
 function Doodle({ emoji, style = {} }) {
   return <div className="doodle" style={style}>{emoji}</div>
 }
-
 function FloatHeart({ style = {} }) {
   return <div className="float-heart-el" style={style}>💕</div>
 }
-
 function QuoteCard({ children }) {
   return (
     <div className="quote-card">
@@ -44,7 +40,6 @@ function QuoteCard({ children }) {
     </div>
   )
 }
-
 /* ===== PAGE 1: MEMORY WALL ===== */
 export function PageOneLeft({ onImageClick }) {
   return (
@@ -62,11 +57,10 @@ export function PageOneLeft({ onImageClick }) {
       <QuoteCard>
         "Some people come into your life and change everything — you're one of them. 🌸"
       </QuoteCard>
-      <div className="caption-text" style={{ opacity: 0.6, fontSize: 12, marginTop: -2 }}>— your besties 💕</div>
+      <div className="caption-text" style={{ opacity: 0.6, fontSize: 12, marginTop: -2 }}>— your bhavya 💕</div>
     </div>
   )
 }
-
 export function PageOneRight({ onImageClick }) {
   return (
     <div className="page page-right" style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -88,7 +82,6 @@ export function PageOneRight({ onImageClick }) {
     </div>
   )
 }
-
 /* ===== PAGE 2: HEART COLLAGE ===== */
 const HEART_POSITIONS = [
   { left: '26%', top: '15%', delay: '0s', src: '/photo_selfie.jpg' },
@@ -97,7 +90,6 @@ const HEART_POSITIONS = [
   { right: '8%', top: '40%', delay: '0.9s', src: '/photo_side.jpg' },
   { left: '50%', top: '68%', transform: 'translateX(-50%)', delay: '1.2s', src: '/photo_chibi.jpg' }
 ]
-
 export function PageTwoLeft({ onImageClick }) {
   return (
     <div className="page page-left" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
