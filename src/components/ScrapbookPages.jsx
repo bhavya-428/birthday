@@ -55,7 +55,7 @@ export function PageOneLeft({ onImageClick }) {
       <Doodle emoji="💫" style={{ top: '52%', left: 6, fontSize: 11 }} />
 
       <div className="page-heading">Our Beginning ✨</div>
-      <PhotoSlot src="/illust_cherry_blossom.png" label="cherry blossom picnic" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
+      <PhotoSlot src="/photo_selfie.jpg" label="Our first picture together 🥺💖" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
       <div className="caption-text" style={{ fontSize: 'clamp(12px,1.9vw,15px)', color: '#b5306e', marginTop: 2 }}>
         The day we first met… 🌷
       </div>
@@ -75,7 +75,7 @@ export function PageOneRight({ onImageClick }) {
       <Doodle emoji="🌙" style={{ bottom: 14, right: 10, fontSize: 13 }} />
 
       <div className="page-heading" style={{ color: '#8040a0' }}>My Favorite Memory ✨</div>
-      <PhotoSlot src="/illust_starry_night.png" label="starry night camp" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
+      <PhotoSlot src="/photo_hug.jpg" label="That warm, cozy hug from behind 🧸💕" style={{ height: '50%', flexShrink: 0 }} onImageClick={onImageClick} />
       <div className="caption-text" style={{ fontSize: 'clamp(12px,1.9vw,15px)', color: '#8040a0', marginTop: 2 }}>
         remember this day? 🥺💖
       </div>
@@ -91,11 +91,11 @@ export function PageOneRight({ onImageClick }) {
 
 /* ===== PAGE 2: HEART COLLAGE ===== */
 const HEART_POSITIONS = [
-  { left: '26%', top: '15%', delay: '0s', src: '/illust_cafe.png' },
-  { right: '26%', top: '15%', delay: '0.3s', src: '/illust_roadtrip.png' },
-  { left: '8%',  top: '40%', delay: '0.6s', src: '/illust_beach.png' },
-  { right: '8%', top: '40%', delay: '0.9s', src: '/illust_cherry_blossom.png' },
-  { left: '50%', top: '68%', transform: 'translateX(-50%)', delay: '1.2s', src: '/illust_starry_night.png' }
+  { left: '26%', top: '15%', delay: '0s', src: '/photo_selfie.jpg' },
+  { right: '26%', top: '15%', delay: '0.3s', src: '/photo_hug.jpg' },
+  { left: '8%',  top: '40%', delay: '0.6s', src: '/photo_away.jpg' },
+  { right: '8%', top: '40%', delay: '0.9s', src: '/photo_side.jpg' },
+  { left: '50%', top: '68%', transform: 'translateX(-50%)', delay: '1.2s', src: '/photo_chibi.jpg' }
 ]
 
 export function PageTwoLeft({ onImageClick }) {
@@ -123,11 +123,11 @@ export function PageTwoLeft({ onImageClick }) {
               e.stopPropagation()
               if (onImageClick) {
                 const labels = {
-                  '/illust_cafe.png': 'Cafe date with friends ☕',
-                  '/illust_roadtrip.png': 'Roadtrip adventure 🚗',
-                  '/illust_beach.png': 'Sunny beach day 🏖️',
-                  '/illust_cherry_blossom.png': 'Cherry blossom picnic 🌸',
-                  '/illust_starry_night.png': 'Starry night campfire ✨'
+                  '/photo_selfie.jpg': 'Our favorite selfie together 🥺💖',
+                  '/photo_hug.jpg': 'That warm, cozy hug from behind 🧸💕',
+                  '/photo_away.jpg': 'A beautiful moment captured forever ✨🌸',
+                  '/photo_side.jpg': 'Every side of you is absolutely wonderful 🌷💫',
+                  '/photo_chibi.jpg': 'My favorite chibi art collage of you! 🎨💝'
                 };
                 onImageClick(pos.src, labels[pos.src] || 'Memory')
               }
@@ -210,13 +210,13 @@ export function PageTwoRight() {
 
 /* ===== PAGE 3: POLAROIDS ===== */
 const POLAROIDS_LEFT = [
-  { w: '44%', top: '2%',  left: '2%',   rotate: '-6deg', cap: 'beach day ☀️', src: '/illust_beach.png' },
-  { w: '42%', top: '6%',  right: '2%',  rotate: '5deg',  cap: 'bff forever 💕', src: '/illust_cherry_blossom.png' },
-  { w: '46%', bottom: '4%', left: '8%', rotate: '3deg',  cap: 'that night out ✨', src: '/illust_starry_night.png' }
+  { w: '44%', top: '2%',  left: '2%',   rotate: '-6deg', cap: 'magic sunset 🌅', src: '/photo_away.jpg' },
+  { w: '42%', top: '6%',  right: '2%',  rotate: '5deg',  cap: 'bff forever 💕', src: '/photo_selfie.jpg' },
+  { w: '46%', bottom: '4%', left: '8%', rotate: '3deg',  cap: 'chibi art grid 🎨', src: '/photo_chibi.jpg' }
 ]
 const POLAROIDS_RIGHT = [
-  { w: '48%', top: '4%',  right: '4%',  rotate: '-4deg', cap: 'silly moments 😝', src: '/illust_roadtrip.png' },
-  { w: '46%', bottom: '2%', left: '4%', rotate: '6deg',  cap: 'always together 🌷', src: '/illust_cafe.png' }
+  { w: '48%', top: '4%',  right: '4%',  rotate: '-4deg', cap: 'warmest hug 🧸', src: '/photo_hug.jpg' },
+  { w: '46%', bottom: '2%', left: '4%', rotate: '6deg',  cap: 'elegant side view 🌷', src: '/photo_side.jpg' }
 ]
 
 function PolaroidCard({ style, rotate, width, cap, src, onImageClick }) {
@@ -404,7 +404,7 @@ export function PageFourFull({ onReset }) {
       <div className="video-frame">
         <video 
           src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-background-987-large.mp4" 
-          poster="/illust_starry_night.png"
+          poster="/photo_selfie.jpg"
           controls 
           loop 
           muted 
