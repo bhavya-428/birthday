@@ -980,6 +980,12 @@ body {
   animation: hintBlink 2s infinite alternate;
 }
 
+@media (max-width: 768px) {
+  .scrapbook-instructions {
+    display: none !important;
+  }
+}
+
 @keyframes hintBlink {
   0% { opacity: 0.4; }
   100% { opacity: 0.95; }
