@@ -121,6 +121,7 @@ export default function Scrapbook() {
             <PageTwoLeft onImageClick={onImageClick} />
           </div>
         </div>
+
         {/* --- SHEET 3 (PAGE 2 RIGHT & PAGE 3 LEFT) --- */}
         <div className={`book-sheet sheet-depth-3 ${flippedSheets.includes(2) ? 'flipped' : ''}`} style={{ zIndex: flippedSheets.includes(2) ? 30 : 20 }}>
           {/* Front Face: Page 2 Right */}
@@ -134,6 +135,7 @@ export default function Scrapbook() {
             <PageThreeLeft onImageClick={onImageClick} />
           </div>
         </div>
+
         {/* --- SHEET 4 (PAGE 3 RIGHT & FINAL PAGE) --- */}
         <div className={`book-sheet sheet-depth-4 ${flippedSheets.includes(3) ? 'flipped' : ''}`} style={{ zIndex: flippedSheets.includes(3) ? 40 : 10 }}>
           {/* Front Face: Page 3 Right */}
@@ -147,12 +149,26 @@ export default function Scrapbook() {
             onClick={(e) => {
               if (e.target.closest('.video-frame') || e.target.closest('.reset-book-btn')) return;
               handleFlip(3);
-            }   >
+            }}
+          >
             <div className="final-spine-shadow" />
             <PageFourFull onReset={resetBook} />
           </div>
         </div>
+
       </div>
+
+      {/* --- INSTRUCTIONS HINT --- */}
+      <div className="scrapbook-instructions">
+        {flippedSheets.length === 0 ? (
+          <span>✦ Tap the cover to open the scrapbook ✦</span>
+        ) : flippedSheets.length === totalSheets ? (
+          <span>✦ Tap any page to flip back ✦</span>
+        ) : (
+          <span>✦ Tap on the outer edges to turn pages ✦</span>
+        )}
+      </div>
+
       {/* --- IMAGE LIGHTBOX --- */}
       {activeImage && (
         <div className="lightbox-overlay" onClick={() => setActiveImage(null)}>
